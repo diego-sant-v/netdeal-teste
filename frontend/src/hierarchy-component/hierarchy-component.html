@@ -1,0 +1,116 @@
+<form ng-submit="$ctrl.saveStaff()">
+    <div class="div_staff_register w-100">
+        <div class="div_staff_name">
+            <label for="inputStaffName">Nome:</label>
+            <br>
+            <input required ng-model="$ctrl.objStaffToSave.name" placeholder="digite o seu nome" type="text" id="inputStaffName">
+        </div>
+
+        <div class="div_staff_password">
+            <label for="staffPassword">Senha:</label>
+            <br>
+            <input required ng-model="$ctrl.objStaffToSave.password" placeholder="digite a sua senha" type="password"
+                id="staffPassword">
+        </div>
+        <div>
+            <label for="staffHierarchyType">Hierarquia:</label>
+            <br>
+            <select class="staff_hierarchy_input" id="staffHierarchyType" ng-model="$ctrl.objStaffToSave.hierarchy"
+                ng-options="type for type in $ctrl.hierarchyTypes">
+                <option value="" disabled>Selecione o tipo de hierarquia</option>
+            </select>
+        </div>
+
+        <div class="div-staff-btn">
+            <button class="btn btn-gray" type="submit">
+                <span class="span-btn-save">Salvar</span>
+            </button>
+        </div>
+    </div>
+</form>
+<div ng-if="$ctrl.allStaffs.length > 0" class="div_data_staff">
+    <div ng-repeat="staff in $ctrl.allStaffs | orderBy : 'orderHierarchy'">
+        <div ng-click="selectedStaff = !selectedStaff" class="div_staff_list" ng-class="{'staff-spacing': staff.orderHierarchy > 1, 'team-leader-spacing': staff.orderHierarchy == 1,
+            'selected-row': selectedStaff == true}">
+            <input type="checkbox" ng-checked="selectedStaff == true">
+
+            <div class="w-12 space-between-elements m-auto">
+                <span class="data_staff_name">{{staff.name}}</span>
+            </div>
+        
+            <div class="w-5 space-between-elements m-auto">
+                <span>{{staff.hierarchy}}</span>
+            </div>
+        
+            <div class="w-5 space-between-elements m-auto">
+                <button class="btn btn-gray">
+                    <span>{{staff.scorePassword <= 100 ? staff.scorePassword : 100}}%</span>
+                </button>
+            </div>
+
+            <div class="w-5 space-between-elements m-auto">
+                <button ng-class="{'bk-bad' : staff.passwordRate == 'RUIM', 'bk-avarage' : staff.passwordRate == 'MEDIANA',
+                'bk-god' : staff.passwordRate == 'BOM', 'bk-strong' : staff.passwordRate == 'FORTE'}" class="btn">
+                    <span class="span-password-rate">{{staff.passwordRate}}</span>
+                </button>
+            </div>
+        
+            <div class="w-23 div_password_rate space-between-elements m-auto">
+                <span class="float-right">Criado em: {{staff.createdAt | date: 'dd/MM/yyyy HH:mm:ss'}}</span>
+            </div>
+        
+            <div class="w-23 div_password_rate space-between-elements m-auto">
+                <span class="float-right">Atualizado em: {{staff.updatedAt | date: 'dd/MM/yyyy HH:mm:ss'}}</span>
+            </div>
+        
+            <div class="w-5 div_btn_delete m-auto">
+                <button ng-if="selectedStaff == true" class="btn-delete btn btn-gray" ng-click="$ctrl.deleteStaff(staff.id)">
+                    <span>Deletar</span>
+                </button>
+            </div>
+
+            <div class="w-5 div_btn_delete m-auto">
+                <button ng-if="selectedStaff == true" class="btn-delete btn btn-gray" ng-click="$ctrl.openPopupEdit(staff)">
+                    <span>Editar</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- POP-UP PARA EDITAR CADASTRO -->
+<div id="popup" class="popup">
+  <div class="popup-content">
+    <span class="close" ng-click="$ctrl.closePopupEdit()">&times;</span>
+    <form ng-submit="$ctrl.updateStaffProps()">
+        <div class="div_staff_register w-100">
+            <div class="div_staff_name m-auto">
+                <label for="inputStaffName">Nome:</label>
+                <br>
+                <input required ng-model="$ctrl.objStaffToUpdate.name" placeholder="digite o seu nome" type="text" id="inputStaffName">
+            </div>
+    
+            <div class="div_staff_password m-auto">
+                <label for="staffPassword">Senha:</label>
+                <br>
+                <input required ng-model="$ctrl.objStaffToUpdate.password" placeholder="digite a sua senha" type="password"
+                    id="staffPassword">
+            </div>
+            <div class="m-auto">
+                <label for="staffHierarchyType">Hierarquia:</label>
+                <br>
+                <select required class="staff_hierarchy_input" id="staffHierarchyType" ng-model="$ctrl.objStaffToUpdate.hierarchy"
+                    ng-options="type for type in $ctrl.hierarchyTypes">
+                    <option value="" disabled>Selecione o tipo de hierarquia</option>
+                </select>
+            </div>
+    
+            <div class="div-staff-btn m-auto">
+                <button class="btn btn-fix-position btn-gray m-auto" type="submit">
+                    <span class="span-btn-save">Salvar</span>
+                </button>
+            </div>
+        </div>
+    </form>
+  </div>
+</div>
